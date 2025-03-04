@@ -17,9 +17,13 @@ Scrivere le funzioni seguenti.
 """
 def occ(lst, v):
     rtn = []
-    for i in range(len(lst)):
+    """for i in range(len(lst)):
         if v == lst[i]:
             rtn += [i]
+    """
+    for i, X in enumerate(lst):
+        if X == v:
+            rtn.append(i)
     return rtn
 
 """
@@ -74,4 +78,5 @@ def groupd(lst):
     for i in range(len(lst)):
        if i == 0 or i%3==0:
            rtn += [str(lst[i]) + '/' + str(lst[i+1]) + '/' + str(lst[i+2])]
-    return rtn
+    lst.clear()
+    lst += rtn
