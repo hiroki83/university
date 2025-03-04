@@ -74,9 +74,13 @@ def lastfirst(lst):
 ['1/2/2013', '23/9/2011', '10/11/2000']
 """
 def groupd(lst):
-    rtn = []
+    for i in range(len(lst)//3):
+        dd, mm, yy = lst[i:i+3]
+        lst[i:i+3] = [str(dd) + '/' + str(mm) + '/' + str(yy)]
+    """
     for i in range(len(lst)):
        if i == 0 or i%3==0:
            rtn += [str(lst[i]) + '/' + str(lst[i+1]) + '/' + str(lst[i+2])]
     lst.clear()
     lst += rtn
+    """
