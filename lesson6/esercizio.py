@@ -5,17 +5,6 @@ Created on Wed Mar 12 08:51:41 2025
 
 @author: hirokiinoue
 
-## ESERCIZI
-Scrivere le funzioni seguenti.
-
-1. firstline(t, s) ritorna la prima linea della stringa t che contiene la stringa s , mentre se s non occorre in t ritorna None . 
-	Esempio
->>> t = '''Quant’è bella giovinezza
-che si fugge tuttavia!
-Chi vuol esser lieto, sia:
-del doman non c’è certezza.'''
-	firstline(t, 'non')		ritorna		'del doman non c’è certezza.'
-
 2. countw(t, w) ritorna il numero di occorrenze della parola w nella stringa t . 
 	Esempio
 	t = 'le cose non sono solo cose, ma anche cosette'
@@ -59,3 +48,17 @@ la funzione built-in bytes , ad es. bytes(iniziofine, 'raw_unicode_escape') . �
 ## 
 """
 
+"""
+## ESERCIZI
+Scrivere le funzioni seguenti.
+
+1. firstline(t, s) ritorna la prima linea della stringa t che contiene la stringa s , mentre se s non occorre in t ritorna None . 
+	Esempio
+>>> t = '''Quant’è bella giovinezza
+che si fugge tuttavia!
+Chi vuol esser lieto, sia:
+del doman non c’è certezza.'''
+	firstline(t, 'non')		ritorna		'del doman non c’è certezza.'
+"""
+def firstline(t s):
+    text = splitline(t)
