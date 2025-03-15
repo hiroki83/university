@@ -104,6 +104,19 @@ def digits(t):
             rtn += [word]
     return rtn
 
+def digitsv2(t):
+    num = ''
+    numAry = []
+    for c in t:
+        if c.isdigit():
+            num += c
+        elif num:
+            numAry.append(num)
+            num = ''
+    if num:
+        numAry.append(num)
+    return numAry
+            
 """
 4. column(table, k) ritorna una lista che contiene i valori della colonna k della tabella table . 
    La tabella è rappresentata in modo che ogni linea di table contiene una riga e i valori delle colonne sono separati
