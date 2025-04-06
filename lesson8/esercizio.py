@@ -53,22 +53,24 @@ def k_massimi_casuali_comprehension(N, S, K):
         #ggiorno i K maggiori valori inserendoci X se necessario
         aggiorna_k_massimi_comprehension(result, X, K)
     # torno i K valori massimi
-    return result
+    #return result
 
 def aggiorna_k_massimi_comprehension(massimi, V, K):
     '''aggiorno i K massimi aggiungendo un nuovo valore V in modo ottimizzato'''
     # se massimi contiene meno di K valori aggiungiamo V alla lista mantenendo l'ordine
     if len(massimi) < K:
-        add_sorted(massimi, V)
+        #add_sorted(massimi, V)
+        inserisci_in_lista_ordinata(V, massimi)
     # altrimenti se V è minore o uguale del minimo valore contenuto in massimi lo ignoriamo
-    elif massimi[0] < V:
-        massimi.remove(massimi[0])
-        add_sorted(massimi, V)
+    elif massimi[len(massimi)-1] < V:
+        #add_sorted(massimi, V)
+        inserisci_in_lista_ordinata(V, massimi)
+        massimi.pop()
     # altrimenti eliminiamo il minimo ed aggiungiamo V alla lista mantenendo l'ordine
 
 def add_sorted(massimi, V):
     '''aggiungo il valore V nella lista massimi in ordine crescente.'''
-    print(V)
+    #print(V)
     # se massimo è vuota lo aggiungo
     if len(massimi)==0:
         massimi.append(V)
@@ -78,10 +80,26 @@ def add_sorted(massimi, V):
         massimi.insert(idx, V)
     # altrimenti se il valore è maggiore o uguale del massimo valore lo aggiungo append()
     elif max(massimi) < V:
-        massimi.append(V)
+        massimi.insert(0,V)
     # altrimenti cerco un valore maggiore, lo appena trovato inserisco prima di lui
     else:
         for i in range(len(massimi)):
-            if (massimi[i]>V):
+            if (massimi[i]<V):
                 massimi.insert(i,V)
                 break
+            
+def inserisci_in_lista_ordinata(X, lista):
+    inizio = 0
+    fine = len(lista)-1
+    while inizio <= fine:
+        medio = (inizio+fine)//2
+        Y = lista[medio]
+        if Y == X:
+            lista.insert(medio, Y)
+            return
+        if X > Y:
+            fine = medio -1
+        else:
+            inizio = medio + 1
+    lista.insert(inizio, X)
+    
