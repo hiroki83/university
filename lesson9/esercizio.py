@@ -71,7 +71,16 @@ def all_char(fname, enc):
 >>> anagrams(fname, 'elbow')	ritorna ['elbow', 'below']
 
 '''
-
+import words as ww
+def anagrams(fname, w):
+    result = []
+    with open(fname) as f:
+        text = f.read()
+        wordList = ww.words(text)
+        for word in wordList:
+            if len(w) == len(word):
+                result.append(word)
+    return result
 '''
 4. log_update(filelog, evento) aggiorna il file filelog aggiungendo una nuova linea che inizia con la data e l'orario
    della chiamata e dopo ': ' la stringa in evento . Per ottenere la data e l'orario si possono usare le funzioni
