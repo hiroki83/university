@@ -71,15 +71,27 @@ def all_char(fname, enc):
 >>> anagrams(fname, 'elbow')	ritorna ['elbow', 'below']
 
 '''
-import words as ww
+import modules.words as ww
 def anagrams(fname, w):
     result = []
     with open(fname) as f:
         text = f.read()
         wordList = ww.words(text)
         for word in wordList:
-            if len(w) == len(word):
-                result.append(word)
+            if len(w) == len(word) and not word in result:
+                flg = True
+                for rword in result:
+                    if (word.lower() == rword.lower()):
+                        flg = False
+                        break
+                #print(word, ' - ', result)
+                if flg:
+                    for char in w:
+                        if not char.lower() in word.lower():
+                            flg = False
+                            break
+                if flg:
+                    result.append(word)
     return result
 '''
 4. log_update(filelog, evento) aggiorna il file filelog aggiungendo una nuova linea che inizia con la data e l'orario
@@ -96,10 +108,28 @@ Mon Oct 7 17:48:22 2013: first event
 Mon Oct 7 17:48:32 2013: second event
 Mon Oct 7 17:49:15 2013: Event n. 3
 Mon Oct 7 17:50:39 2013: New event!
+'''
 
+import time
+import os
+def log_update(filelog, evento):
+    lines = []
+    try:
+        with open(filelog, mode='r+') as f:
+            lines = f.readlines()
+    except:
+        print('file not exist!')
+    with open(filelog, mode='a') as f:
+        if (len(lines) > 0):
+            f.write(os.linesep)
+        f.write(time.ctime() + ': ' + evento)
+    with open(filelog, mode='r') as f:
+        print(f.read())
+'''
 
-5. findurl(lista_url, s, k) ritorna in una lista gli URL contenuti nella lista lista_urls tali che le pagine da essi puntate contengano almeno k
-   occorrenze della stringa s . Si assume che gli URL in urls siano relativi a pagine HTML e quindi documenti di testo. 
+5. findurl(lista_url, s, k) ritorna in una lista gli URL contenuti nella lista lista_urls 
+   tali che le pagine da essi puntate contengano almeno k occorrenze della stringa s . 
+   Si assume che gli URL in urls siano relativi a pagine HTML e quindi documenti di testo. 
    Esempi, sia
 
 >>> urls = ['http://python.org', 'http://google.com', 'http://docs.python.org/2.7/index.html', 'http://pellacini.di.uniroma1.it/teaching/fondamenti13/index.html']
@@ -109,3 +139,17 @@ Mon Oct 7 17:50:39 2013: New event!
 ['http://python.org', 'http://docs.python.org/2.7/index.html']
 '''
 
+import requests
+def findurl(lista_url, s, k):
+    result = []
+    for url in lista_url:
+        with requests.get(url) as f:
+            page = f.text
+            lista_word = ww.words(page)
+            cnt = 0
+            for wd in lista_word:
+                if s == wd:
+                    cnt += 1
+            if cnt >= k:
+                result.append(url)
+    return result
