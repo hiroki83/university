@@ -53,7 +53,8 @@ def all_char(fname, enc):
     result = ''
     with open(fname, encoding=enc) as f:
         text = f.read()
-        for i in range(len(text)):
+        #for i in range(len(text)):
+        for i in text:
             if not text[i] in result:
                 result += (text[i])
     return result
@@ -93,6 +94,76 @@ def anagrams(fname, w):
                 if flg:
                     result.append(word)
     return result
+# La funzione del metodo anagrams(fname, w)
+# per trovare gli anagrammi in un file della parola w
+    # all'inizio il risultato è una lista vuota
+    # convertiamo la parola w in minuscolo
+    # leggiamo dal file il suo contenuto e lo convertiamo in minuscole
+    # per ogni parola
+        # se NON è già apparsa ed è un anagramma della parola w
+            # la aggiungiamo al risultato
+    # alla fine torniamo la lista di anagrammi
+def anagrams_enhanced(fname, wx):
+    result = []
+    wx = wx.lower()
+    with open(fname) as f:
+        text = f.read().lower()
+        #print(text [100:110])
+        wordList = testo_to_parole(text)
+        #print(wordList[100:103])
+        for wd in wordList:
+            #print(wd)
+            if not wd in result and sono_anagrammi(wd, wx):
+                result.append(wd)
+    return result
+
+# La funzione del metodo testo_to_parole(testo):
+# per ottenere le parole di un testo
+    # all'inizio la lista è vuota
+    # all'inizio la parola corrente non contiene nessun carattere
+    # scandiamo i caratteri del testo
+        # se il carattere corrente è alfabetico
+            # lo aggiungiamo alla parola corrente
+        # altrimenti
+            # la parola corrente è finita e la spostiamo nella lista delle parole
+            # e azzeriamo la parola corrente
+    # se alla fine la parola corrente non è vuota vuol dire che il testo finiva con una parola 
+        # e quindi la aggiungiamo alle parole
+    # torniamo le parole trovate
+
+def testo_to_parole(testo):
+    parole = []
+    parola = ''
+    for ch in testo:
+        if ch.isalpha():
+            parola += ch
+        else:
+            if len(parola) > 0:
+                parole.append(parola)
+            parola = ''
+    if len(parola) > 0:
+        parole.append(parola)
+    return parole
+# La seconda funzione ausiliaria sono_anagrammi(parola1, parola2)
+# per controllare se parola1 e parola2 sono anagrammi
+    # costruisco la lista ordinata dei caratteri di parola1
+    # costruisco la lista ordinata dei caratteri di parola2
+    # torno come risultato il risultato del loro confronto (se sono uguali torna True)
+def sono_anagrammi(parola1, parola2):
+    #parola1_chars,parola2_chars = [],[]
+    #parola1_chars += parola1
+    #parola2_chars += parola2
+    #parola1_chars.sort()
+    #parola2_chars.sort()
+    #print(''.join(parola1_chars), ''.join(parola2_chars))
+    #if (''.join(parola1_chars) == ''.join(parola2_chars)):
+    #    return True
+    #else:
+    #    return False
+    #print(parola1, parola2)
+    p1sorted = sorted(parola1)
+    p2sorted = sorted(parola2)
+    return p1sorted == p2sorted
 '''
 4. log_update(filelog, evento) aggiorna il file filelog aggiungendo una nuova linea che inizia con la data e l'orario
    della chiamata e dopo ': ' la stringa in evento . Per ottenere la data e l'orario si possono usare le funzioni
@@ -109,7 +180,11 @@ Mon Oct 7 17:48:32 2013: second event
 Mon Oct 7 17:49:15 2013: Event n. 3
 Mon Oct 7 17:50:39 2013: New event!
 '''
-
+# per aggiungere un evento ad un file di log
+    # leggiamo il time corrente
+    # lo convertiamo in una stringa che indica la data/ora
+    # apriamo il file di log in modalità testo, append
+        # scriviamo nel file la riga di testo
 import time
 import os
 def log_update(filelog, evento):
@@ -139,6 +214,14 @@ def log_update(filelog, evento):
 ['http://python.org', 'http://docs.python.org/2.7/index.html']
 '''
 
+# per ottenere gli url che contengono almeno k volte la parola s
+    # all'inizio il risultato è vuoto
+    # per ogni url tra quelli passati
+        # leggiamo il contenuto della pagina corrispondente
+        # contiamo quante volte ci appare la parola s
+        # se il conto è maggiore o uguale k
+            # aggiungiamo lo url al risultato
+    # alla fine torniamo gli url raccolti
 import requests
 def findurl(lista_url, s, k):
     result = []
@@ -146,10 +229,11 @@ def findurl(lista_url, s, k):
         with requests.get(url) as f:
             page = f.text
             lista_word = ww.words(page)
-            cnt = 0
-            for wd in lista_word:
-                if s == wd:
-                    cnt += 1
+            #cnt = 0
+            #for wd in lista_word:
+            #    if s == wd:
+            #        cnt += 1
+            cnt = page.count(s)
             if cnt >= k:
                 result.append(url)
     return result
