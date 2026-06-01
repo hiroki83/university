@@ -40,7 +40,6 @@ Esempio:
 """
 def func1(n: int) -> int:
     pass
-    return bin(n).count('1')
 
 
 # %% ----------------------------------- FUNC.2 ---------------------------------- #
@@ -60,17 +59,6 @@ NOTA: non usate la libreria 're'
 """
 def func2(message: str, colors: dict) -> str:
     pass
-    for k,v in colors.items():
-        D = {
-            f"[color:{k}]" : f"<{v}>",
-            f"[/color]": f"</{v}>"
-        }
-        while (pos := message.find(f"[color:{k}]")) != -1:
-            prima, resto = message[:pos], message[pos:]
-            resto = resto.replace(f"[/color]", f"</{v}>", 1)
-            resto = resto.replace(f"[color:{k}]",f"<{v}>", 1)
-            message = prima + resto
-    return message
 
 
 # %% ----------------------------------- FUNC.3 ---------------------------------- #
@@ -93,8 +81,6 @@ Esempio:
 """
 def func3(inventory: dict, recipe: dict) -> bool:
     pass
-    return all( k in inventory and inventory[k] >= recipe[k]
-                for k in recipe)
 
 
 # %% ----------------------------------- FUNC.4 ---------------------------------- #
@@ -132,17 +118,6 @@ va sommato 5
 """
 def func4(base_stats: dict, equipment: list[dict]) -> dict:
     pass
-    def criterio(bonus: dict) -> tuple:
-        return bonus['type']
-    for bonus in sorted(equipment, key=criterio):
-        tipo   = bonus['stat']
-        op     = bonus['type']
-        quanto = bonus['val']
-        if op == 'add':
-            base_stats[tipo] += quanto
-        else:
-            base_stats[tipo] *= quanto
-    return base_stats
 
 
 # %% ----------------------------------- FUNC.5 ---------------------------------- #
@@ -171,36 +146,6 @@ Suggerimento:
 import images
 def func5(path_in: str, path_out: str):
     pass
-    img = images.load(path_in)
-    x, y = trova_baricentro(img)
-    img2 = ruota_immagine(img, x, y)
-    images.save(img2, path_out)
-    return x, y
-
-def trova_baricentro(img):
-    SX = SY = N = 0
-    for y, riga in enumerate(img):
-        for x, pixel in enumerate(riga):
-            if pixel != (0, 0, 0):
-                SX += x
-                SY += y
-                N += 1
-    return round(SX / N), round(SY / N)
-
-def ruota_immagine(img, x, y):
-    W, H = len(img), len(img[0])
-    def inside(px,py):
-        return 0 <= px < W and 0 <= py < H
-    img2 = [ [(0,0,0)]*W for _ in range(H)]
-    for Y, row in enumerate(img):
-        for X, pixel in enumerate(row):
-            dx = X - x
-            dy = Y - y
-            nx = x - dy
-            ny = y + dx
-            if inside(nx, ny):
-                img2[ny][nx] = pixel
-    return img2
 
 # %% ----------------------------------- EX.1 ------------------------- #
 """
@@ -214,18 +159,8 @@ tra il sottoalbero sinistro e quello destro non è superiore a 1.
 """
 import tree
 
-def altezza(root: tree.BinaryTree):
-    if root is None:
-        return 0
-    return 1 + max(altezza(root.left), altezza(root.right))
-
 def ex1(root: tree.BinaryTree) -> bool:
     pass
-    if root is None:
-        return True
-    if abs(altezza(root.left) - altezza(root.right)) > 1:
-        return False
-    return ex1(root.left) and ex1(root.right)
 
 # %% ----------------------------------- EX.2 ------------------------- #
 """
@@ -248,9 +183,6 @@ Esempio:
 """
 def ex2(data: list) -> int:
     pass
-    if isinstance(data, list):
-        return sum((ex2(x) for x in data), start=0)
-    return data if data %2==0 else 0
 
 
 # %%
