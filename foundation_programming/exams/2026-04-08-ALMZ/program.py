@@ -39,7 +39,13 @@ Esempio:
     n = 16 (binario 10000) -> expected: 1
 """
 def func1(n: int) -> int:
-    pass
+    cnt = 0
+    while n > 0:
+        m = n%2
+        n //= 2
+        if m == 1:
+            cnt += 1
+    return cnt
 
 
 # %% ----------------------------------- FUNC.2 ---------------------------------- #
@@ -58,8 +64,24 @@ Esempio:
 NOTA: non usate la libreria 're'
 """
 def func2(message: str, colors: dict) -> str:
-    pass
-
+    prefix1 = '[color:'
+    keyword2 = '[/color]'
+    sp = message.split(keyword2)
+    rtn = ''
+    for s in sp:
+        match = False
+        #print(s)
+        for color, rgb in colors.items():
+            keyword1 = prefix1+color+']'
+            replaceword1 = '<'+rgb+'>'
+            replaceword2 = '</'+rgb+'>'
+            if keyword1 in s:
+                #print(keyword1)
+                rtn = rtn + s.replace(keyword1, replaceword1) + replaceword2
+                match = True
+        if not match:
+            rtn = rtn + s
+    return rtn
 
 # %% ----------------------------------- FUNC.3 ---------------------------------- #
 """
@@ -80,7 +102,10 @@ Esempio:
     Risultato: False (manca la pelle nell'inventario)
 """
 def func3(inventory: dict, recipe: dict) -> bool:
-    pass
+    for m, q in recipe.items():
+        if inventory.get(m) == None or inventory.get(m) < q:
+            return False
+    return True
 
 
 # %% ----------------------------------- FUNC.4 ---------------------------------- #
@@ -117,10 +142,20 @@ e poi va moltiplicato per 1.1, mentre al valore della statistica 'def'
 va sommato 5
 """
 def func4(base_stats: dict, equipment: list[dict]) -> dict:
-    pass
+    equipment.sort(key=lambda x: x['type'])#sort by type
+    for d in equipment:
+        stat = d['stat']
+        type = d['type']
+        val = d['val']
+        for k, v in base_stats.items():
+            if k == stat:
+                if type == 'add':
+                    base_stats[k] = v + val
+                else:
+                    base_stats[k] = v * val
+    return base_stats
 
-
-# %% ----------------------------------- FUNC.5 ---------------------------------- #
+                    # %% ----------------------------------- FUNC.5 ---------------------------------- #
 """
 Func 5: 8 punti
 
@@ -145,7 +180,48 @@ Suggerimento:
 """
 import images
 def func5(path_in: str, path_out: str):
-    pass
+    img = images.load(path_in)
+    width, height = len(img[0]), len(img)
+
+    x_media, y_media = calc_centroid(img)#obtain centroid
+    pos = calc_position(x_media, y_media, img)
+    draw_position(pos, x_media, y_media, width, height, path_out)
+
+def draw_position(pos, x_media, y_media, width, height, path_out):
+    img = [[(0,0,0) for _ in range(width)] for _ in range(height)]
+    for x, y, color in pos:
+        xx = x_media + y
+        yy = y_media - x
+        if 0 <= xx < width and 0 <= yy < height:
+            img[yy][xx] = color
+    images.save(img, path_out)
+
+def calc_position(x_media, y_media, img):
+    '''
+    calclate positon of stain respect a centroid.
+    '''
+    width, height = len(img[0]), len(img)
+    stain = []
+    for y in range(height):
+        for x in range(width):
+            if img[y][x] != (0,0,0):
+                stain.append((x_media - x, y_media - y,img[y][x]))
+    return stain
+
+def calc_centroid(img):
+    '''
+    calclate a centroid (x_media, y_media)
+    '''
+    width, height = len(img[0]), len(img)
+    cnt = 0
+    x_media, y_media = 0,0
+    for y in range(height):
+        for x in range(width):
+            if img[y][x] != (0,0,0):
+                cnt += 1
+                x_media += x
+                y_media += y
+    return round(x_media/cnt), round(y_media/cnt)
 
 # %% ----------------------------------- EX.1 ------------------------- #
 """
@@ -160,7 +236,21 @@ tra il sottoalbero sinistro e quello destro non è superiore a 1.
 import tree
 
 def ex1(root: tree.BinaryTree) -> bool:
-    pass
+    if root is None:
+        return True
+    ldepth, rdepth = depth(root.left), depth(root.right)
+    print(ldepth, rdepth)
+    return abs(ldepth - rdepth) <= 1
+
+def depth(root: tree.BinaryTree) -> int:
+    cnt = 0
+    if root is None:
+        return 0
+    else:
+        cnt = 1
+    cnt += max(depth(root.left),depth(root.right))
+    return cnt
+
 
 # %% ----------------------------------- EX.2 ------------------------- #
 """
@@ -182,8 +272,13 @@ Esempio:
     Output: 12
 """
 def ex2(data: list) -> int:
-    pass
-
+    amount = 0
+    for d in data:
+        if type(d) == list:
+            amount += ex2(d)
+        else:
+            amount += d if d % 2 == 0 else 0
+    return amount
 
 # %%
 if __name__ == '__main__':
