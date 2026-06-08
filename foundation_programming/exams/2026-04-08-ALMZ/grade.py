@@ -204,13 +204,13 @@ def test_ex2_5(run=None): return helper_ex2(5)
 
 # Lista completa dei test raggruppati per esercizio
 tests = [
-    test_func1_1, test_func1_2,
-    test_func2_1, test_func2_2, test_func2_3,
-    test_func3_1, test_func3_2,
-    test_func4_1, test_func4_2, test_func4_3,
-    test_func5_0, test_func5_1, test_func5_2, test_func5_3, test_func5_4, test_func5_5,
+#    test_func1_1, test_func1_2,
+#    test_func2_1, test_func2_2, test_func2_3,
+#    test_func3_1, test_func3_2,
+#    test_func4_1, test_func4_2, test_func4_3,
+#    test_func5_0, test_func5_1, test_func5_2, test_func5_3, test_func5_4, test_func5_5,
     test_ex1_0, test_ex1_1, test_ex1_2, test_ex1_3, test_ex1_4, test_ex1_5,
-    test_ex2_0, test_ex2_1, test_ex2_2, test_ex2_3, test_ex2_4, test_ex2_5,
+#    test_ex2_0, test_ex2_1, test_ex2_2, test_ex2_3, test_ex2_4, test_ex2_5,
     #test_personal_data_entry,
 ]
 

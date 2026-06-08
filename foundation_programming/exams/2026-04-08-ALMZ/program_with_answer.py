@@ -39,13 +39,8 @@ Esempio:
     n = 16 (binario 10000) -> expected: 1
 """
 def func1(n: int) -> int:
-    cnt = 0
-    while n > 0:
-        m = n%2
-        n //= 2
-        if m == 1:
-            cnt += 1
-    return cnt
+    pass
+    return bin(n).count('1')
 
 
 # %% ----------------------------------- FUNC.2 ---------------------------------- #
@@ -64,24 +59,19 @@ Esempio:
 NOTA: non usate la libreria 're'
 """
 def func2(message: str, colors: dict) -> str:
-    prefix1 = '[color:'
-    keyword2 = '[/color]'
-    sp = message.split(keyword2)
-    rtn = ''
-    for s in sp:
-        match = False
-        #print(s)
-        for color, rgb in colors.items():
-            keyword1 = prefix1+color+']'
-            replaceword1 = '<'+rgb+'>'
-            replaceword2 = '</'+rgb+'>'
-            if keyword1 in s:
-                #print(keyword1)
-                rtn = rtn + s.replace(keyword1, replaceword1) + replaceword2
-                match = True
-        if not match:
-            rtn = rtn + s
-    return rtn
+    pass
+    for k,v in colors.items():
+        D = {
+            f"[color:{k}]" : f"<{v}>",
+            f"[/color]": f"</{v}>"
+        }
+        while (pos := message.find(f"[color:{k}]")) != -1:
+            prima, resto = message[:pos], message[pos:]
+            resto = resto.replace(f"[/color]", f"</{v}>", 1)
+            resto = resto.replace(f"[color:{k}]",f"<{v}>", 1)
+            message = prima + resto
+    return message
+
 
 # %% ----------------------------------- FUNC.3 ---------------------------------- #
 """
@@ -102,10 +92,9 @@ Esempio:
     Risultato: False (manca la pelle nell'inventario)
 """
 def func3(inventory: dict, recipe: dict) -> bool:
-    for m, q in recipe.items():
-        if inventory.get(m) == None or inventory.get(m) < q:
-            return False
-    return True
+    pass
+    return all( k in inventory and inventory[k] >= recipe[k]
+                for k in recipe)
 
 
 # %% ----------------------------------- FUNC.4 ---------------------------------- #
@@ -142,20 +131,21 @@ e poi va moltiplicato per 1.1, mentre al valore della statistica 'def'
 va sommato 5
 """
 def func4(base_stats: dict, equipment: list[dict]) -> dict:
-    equipment.sort(key=lambda x: x['type'])#sort by type
-    for d in equipment:
-        stat = d['stat']
-        type = d['type']
-        val = d['val']
-        for k, v in base_stats.items():
-            if k == stat:
-                if type == 'add':
-                    base_stats[k] = v + val
-                else:
-                    base_stats[k] = v * val
+    pass
+    def criterio(bonus: dict) -> tuple:
+        return bonus['type']
+    for bonus in sorted(equipment, key=criterio):
+        tipo   = bonus['stat']
+        op     = bonus['type']
+        quanto = bonus['val']
+        if op == 'add':
+            base_stats[tipo] += quanto
+        else:
+            base_stats[tipo] *= quanto
     return base_stats
 
-                    # %% ----------------------------------- FUNC.5 ---------------------------------- #
+
+# %% ----------------------------------- FUNC.5 ---------------------------------- #
 """
 Func 5: 8 punti
 
@@ -180,48 +170,37 @@ Suggerimento:
 """
 import images
 def func5(path_in: str, path_out: str):
+    pass
     img = images.load(path_in)
-    width, height = len(img[0]), len(img)
+    x, y = trova_baricentro(img)
+    img2 = ruota_immagine(img, x, y)
+    images.save(img2, path_out)
+    return x, y
 
-    x_media, y_media = calc_centroid(img)#obtain centroid
-    pos = calc_position(x_media, y_media, img)
-    draw_position(pos, x_media, y_media, width, height, path_out)
+def trova_baricentro(img):
+    SX = SY = N = 0
+    for y, riga in enumerate(img):
+        for x, pixel in enumerate(riga):
+            if pixel != (0, 0, 0):
+                SX += x
+                SY += y
+                N += 1
+    return round(SX / N), round(SY / N)
 
-def draw_position(pos, x_media, y_media, width, height, path_out):
-    img = [[(0,0,0) for _ in range(width)] for _ in range(height)]
-    for x, y, color in pos:
-        xx = x_media + y
-        yy = y_media - x
-        if 0 <= xx < width and 0 <= yy < height:
-            img[yy][xx] = color
-    images.save(img, path_out)
-
-def calc_position(x_media, y_media, img):
-    '''
-    calclate positon of stain respect a centroid.
-    '''
-    width, height = len(img[0]), len(img)
-    stain = []
-    for y in range(height):
-        for x in range(width):
-            if img[y][x] != (0,0,0):
-                stain.append((x_media - x, y_media - y,img[y][x]))
-    return stain
-
-def calc_centroid(img):
-    '''
-    calclate a centroid (x_media, y_media)
-    '''
-    width, height = len(img[0]), len(img)
-    cnt = 0
-    x_media, y_media = 0,0
-    for y in range(height):
-        for x in range(width):
-            if img[y][x] != (0,0,0):
-                cnt += 1
-                x_media += x
-                y_media += y
-    return round(x_media/cnt), round(y_media/cnt)
+def ruota_immagine(img, x, y):
+    W, H = len(img), len(img[0])
+    def inside(px,py):
+        return 0 <= px < W and 0 <= py < H
+    img2 = [ [(0,0,0)]*W for _ in range(H)]
+    for Y, row in enumerate(img):
+        for X, pixel in enumerate(row):
+            dx = X - x
+            dy = Y - y
+            nx = x - dy
+            ny = y + dx
+            if inside(nx, ny):
+                img2[ny][nx] = pixel
+    return img2
 
 # %% ----------------------------------- EX.1 ------------------------- #
 """
@@ -234,20 +213,19 @@ Un albero è bilanciato se, per ogni nodo, la differenza di altezza
 tra il sottoalbero sinistro e quello destro non è superiore a 1.
 """
 import tree
-def ex1(root: tree.BinaryTree) -> bool:
-    if root is None:
-        return True
-    if abs(depth(root.left)-depth(root.right)) > 1:
-        return False
-    return ex1(root.left) and ex1(root.right)
 
-def depth(root: tree.BinaryTree) -> int:
-    cnt = 0
+def altezza(root: tree.BinaryTree):
     if root is None:
         return 0
-    cnt += 1 + max(depth(root.left),depth(root.right))
-    return cnt
+    return 1 + max(altezza(root.left), altezza(root.right))
 
+def ex1(root: tree.BinaryTree) -> bool:
+    pass
+    if root is None:
+        return True
+    if abs(altezza(root.left) - altezza(root.right)) > 1:
+        return False
+    return ex1(root.left) and ex1(root.right)
 
 # %% ----------------------------------- EX.2 ------------------------- #
 """
@@ -269,13 +247,11 @@ Esempio:
     Output: 12
 """
 def ex2(data: list) -> int:
-    amount = 0
-    for d in data:
-        if type(d) == list:
-            amount += ex2(d)
-        else:
-            amount += d if d % 2 == 0 else 0
-    return amount
+    pass
+    if isinstance(data, list):
+        return sum((ex2(x) for x in data), start=0)
+    return data if data %2==0 else 0
+
 
 # %%
 if __name__ == '__main__':
